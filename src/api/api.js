@@ -7,7 +7,16 @@ export const todosApi = createApi({
   endpoints: (builder) => ({
     getTodosByTitle: builder.query({
       query: () => `todos`,
+      transformResponse: res => res.sort((a,b)=> b.id - a.id),
       providesTags: ["Todos"]
+    }),
+    addTodo: builder.mutation({
+      query:(item) => ({
+        url: `/todos`,
+        method: "POST",
+        body: item
+      }),
+      invalidatesTags: ["Todos"]
     }),
     changeTodo: builder.mutation({
       query:(item) => ({
@@ -28,4 +37,4 @@ export const todosApi = createApi({
   }),
 })
 
-export const {useGetTodosByTitleQuery, useChangeTodoMutation, useDeleteTodoMutation } = todosApi; // той хук має бути точно як треба з use..Query інакше помилка
+export const {useGetTodosByTitleQuery, useChangeTodoMutation, useDeleteTodoMutation, useAddTodoMutation } = todosApi; // той хук має бути точно як треба з use..Query інакше помилка
